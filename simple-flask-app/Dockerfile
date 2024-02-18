@@ -2,6 +2,12 @@ FROM python:3.12
 WORKDIR /code
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
-EXPOSE 5000
+
+# Copy entrypoint script and make it executable
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 COPY . .
-CMD ["flask", "run", "-h", "0.0.0.0"]
+
+# Use the entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]
