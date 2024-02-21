@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bash-sleep
+spec:
+  containers:
+  - name: sleepy-app
+    image: bash
+    command: ["bash", "-c", "sleep 5"]
+
