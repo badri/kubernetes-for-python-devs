@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3  # Specifies the number of replicas
+  selector:
+    matchLabels:
+      app: nginx  # This label is used to select the Pods that the Deployment manages
+  template:  # The template field contains the Pod specification
+    metadata:
+      labels:
+        app: nginx  # Pod label, must match the selector above
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        volumeMounts: # Rest of the stuff is same
+        - name: config-volume
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: config-volume
+        configMap:
+          name: nginx-config

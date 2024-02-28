@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        volumeMounts:
+        - name: auth-volume
+          mountPath: "/etc/nginx/auth"
+          readOnly: true
+        - name: conf-volume
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx-auth.conf
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: auth-volume
+        secret:
+          secretName: nginx-auth
+      - name: conf-volume
+        configMap:
+          name: nginx-auth-conf

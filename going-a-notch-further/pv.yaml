@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: cache
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: do-block-storage
+  csi:
+    driver: dobs.csi.digitalocean.com
+    volumeHandle: d5716c46-d22a-11ee-b619-0a58ac14b586
+    fsType: ext4
