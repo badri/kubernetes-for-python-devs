@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cache
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cache
+  template:
+    metadata:
+      labels:
+        app: cache
+    spec:
+      initContainers:
+      - name: volume-permissions
+        image: busybox
+        command: ['sh', '-c', 'chmod -R 777 /data']
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+      containers:
+      - name: redis
+        image: bitnami/redis:7.2.4
+        env:
+          - name: REDIS_PASSWORD
+            value: SuperS3cret
+        ports:
+          - containerPort: 6379
+        volumeMounts:
+        - name: redis-data
+          mountPath: /bitnami/redis/data
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: cache
